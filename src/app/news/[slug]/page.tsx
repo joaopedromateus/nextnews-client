@@ -37,9 +37,12 @@ const NewsPage = ({ params }: { params: RouteParams }) => {
 
   return (
     <div>
-      <h1>Slug: {params.slug}</h1>
-      <h1>Title: {article.title}</h1>
+      {/* <h1>Slug: {params.slug}</h1> */}
+      <h1> {article.title}</h1>
       <p>Category: {article.category}</p>
+      <img src={article.images} alt="Imagem da notícia" className='w-[600px] rounded-md'/>
+      <p>{article.content}</p>
+
     </div>
   );
 }

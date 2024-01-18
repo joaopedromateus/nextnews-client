@@ -10,6 +10,7 @@ type NewsItem = {
   slug: string;
   content: string;
   category: string;
+  images: string[];
 };
 
 const Home: React.FC = () => {
@@ -29,15 +30,15 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <main className="flex flex-col items-center p-8">
+  
       <section>
         <h2 className="text-2xl font-semibold mb-3">Notícias Recentes:</h2>
         {newsData.map((news) => (
           // Passando o slug diretamente para o componente News
-          <News key={news._id} title={news.title} slug={news.slug} content={news.content} category={news.category} />
+          <News key={news._id} title={news.title} slug={news.slug}  category={news.category} images={news.images}/>
         ))}
       </section>
-    </main>
+  
   );
 };
 

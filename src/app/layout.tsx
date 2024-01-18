@@ -1,3 +1,4 @@
+//client/app/layout.tsx
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
@@ -20,10 +21,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Navbar/>
+        <div className='flex flex-col items-center p-8'>
         {children}
+        </div>
         <Footer/>
-        
-        </body>
+      </body>
     </html>
   )
 }

@@ -1,28 +1,29 @@
-// app/technology/TechnologyPage.tsx
+// app/health/healthPage.tsx
 "use client"
+// healthPage.tsx
 import React, { useEffect, useState } from 'react';
+import News from '../components/News'; // Importe o componente News
 
 // Defina um tipo para os dados da notícia
 type NewsItem = {
   _id: string;
   title: string;
   content: string;
-  category:string;
+  category: string;
+  images: string[];
   // Adicione outras propriedades conforme necessário
 };
 
-const TechnologyPage: React.FC = () => {
-  const [technologyNews, setTechnologyNews] = useState<NewsItem[]>([]);
+const HealthPage: React.FC = () => {
+  const [healthNews, setHealthNews] = useState<NewsItem[]>([]);
 
   useEffect(() => {
-    // Aqui você deve fazer uma requisição para a API que retorna as notícias de Tecnologia.
+    // Faça uma requisição para a API que retorna as notícias de Saúde.
     // Substitua a URL pela rota correta da sua API.
-    fetch('http://localhost:5000/api/articles?category=Health') // Use "Technology" com a primeira letra maiúscula
+    fetch('http://localhost:5000/api/articles?category=Health') // Use "Health" com a primeira letra maiúscula
       .then((response) => response.json())
       .then((data) => {
-        // Filtra apenas as notícias da categoria "Tecnologia"
-        const technologyNewsFiltered = data.filter((article: NewsItem) => article.category === 'Health');
-        setTechnologyNews(technologyNewsFiltered);
+        setHealthNews(data); // Define os dados das notícias de Saúde no estado
       })
       .catch((error) => {
         console.error('Erro ao buscar notícias de Saúde:', error);
@@ -32,17 +33,19 @@ const TechnologyPage: React.FC = () => {
   return (
     <div>
       <h1>Notícias de Saúde</h1>
-      <ul>
-        {technologyNews.map((article) => (
-          <li key={article._id}>
-            <h2>{article.title}</h2>
-            <p>{article.content}</p>
-            {/* Renderize as imagens e outros detalhes do artigo, se necessário */}
-          </li>
-        ))}
-      </ul>
+      {healthNews.map((article) => (
+        // Use o componente News para renderizar cada notícia de Saúde
+        <News
+          key={article._id}
+          slug={article.slug} // Use o ID como slug, você pode ajustar isso conforme necessário
+          title={article.title}
+          // content={article.content}
+          category={article.category}
+          images={article.images}
+        />
+      ))}
     </div>
   );
 };
 
-export default TechnologyPage;
+export default HealthPage;

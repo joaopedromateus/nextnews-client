@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 const Navbar = () => {
   return (
-    <header className="bg-gray-800 text-white p-4">
+    <header className="bg-gray-800 text-white w-full p-4 ">
       <nav>
         <ul className="flex justify-center space-x-4">
           <li>

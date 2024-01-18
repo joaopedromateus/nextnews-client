@@ -1,7 +1,7 @@
 // components/Footer.tsx
 const Footer = () => {
   return (
-    <footer className="bg-gray-800 text-white text-center p-4 absolute bottom-0 w-full">
+    <footer className="bg-gray-800 text-white text-center fixed bottom-0 p-4 w-full">
       <p>&copy; {new Date().getFullYear()} News Portal</p>
     </footer>
   );
