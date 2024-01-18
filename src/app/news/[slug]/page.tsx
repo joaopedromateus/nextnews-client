@@ -1,62 +1,47 @@
+//client/app/news/[slug]/page.tsx
 'use client'
-// app/news/[slug]/page.tsx
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-type NewsItem = {
-  _id: string;
-  title: string;
-  content: string;
-  category: string;
-};
+interface RouteParams {
+  slug: string;
+}
 
-const NewsPage: React.FC = () => {
-  const [newsItem, setNewsItem] = useState<NewsItem | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+const NewsPage = ({ params }: { params: RouteParams }) => {
+  const [article, setArticle] = useState<any>(null);
 
   useEffect(() => {
-    const path = window.location.pathname;
-    const slug = path.split('/').pop();
+    async function fetchData() {
+      const { slug } = params;
+      try {
+        const response = await fetch(`http://localhost:5000/api/articles/${slug}`);
+        const articleData = await response.json();
 
-    if (slug) {
-      fetch(`http://localhost:5000/api/articles/slug/${slug}`)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then(data => {
-          setNewsItem(data);
-          setLoading(false);
-        })
-        .catch(error => {
-          console.error('Error fetching news item:', error);
-          setError(error.message);
-          setLoading(false);
-        });
+        if (!articleData) {
+          setArticle(null);
+          return;
+        }
+
+        setArticle(articleData);
+      } catch (error) {
+        console.error('Erro ao buscar detalhes da notícia:', error);
+        setArticle(null);
+      }
     }
-  }, []);
 
-  if (loading) {
+    fetchData();
+  }, [params]);
+
+  if (!article) {
     return <div>Loading...</div>;
   }
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  if (!newsItem) {
-    return <div>No news item found.</div>;
-  }
-
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6">{newsItem.title}</h1>
-      <p>{newsItem.content}</p>
-      <p className="text-sm font-semibold">Category: {newsItem.category}</p>
+    <div>
+      <h1>Slug: {params.slug}</h1>
+      <h1>Title: {article.title}</h1>
+      <p>Category: {article.category}</p>
     </div>
   );
-};
+}
 
 export default NewsPage;

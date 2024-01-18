@@ -1,9 +1,9 @@
-// components/News.tsx
+//client/app/components/News.tsx
 import React from 'react';
 import Link from 'next/link';
 
 type NewsProps = {
-  slug: string; // Utilize slug em vez de _id
+  slug: string;
   title: string;
   content: string;
   category: string;
@@ -12,7 +12,7 @@ type NewsProps = {
 const News: React.FC<NewsProps> = ({ slug, title, content, category }) => {
   return (
     <div className="mb-8">
-      <Link href={`/news/${slug}`} passHref>
+      <Link href={`/news/${slug}`} >
         <h2 className="text-2xl font-semibold hover:underline cursor-pointer">
           {title}
         </h2>
