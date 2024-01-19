@@ -1,49 +1,49 @@
 // app/technology/TechnologyPage.tsx
 "use client"
 import React, { useEffect, useState } from 'react';
+import News from '../components/News'; // Importe o componente News
 
 // Defina um tipo para os dados da notícia
 type NewsItem = {
   _id: string;
-  slug:string;
   title: string;
   content: string;
-  category:string;
-  // Adicione outras propriedades conforme necessário
+  category: string;
+  images: string[];
+  slug: string; // Certifique-se de que a propriedade slug esteja definida no seu modelo
 };
 
 const TechnologyPage: React.FC = () => {
   const [technologyNews, setTechnologyNews] = useState<NewsItem[]>([]);
 
   useEffect(() => {
-    // Aqui você deve fazer uma requisição para a API que retorna as notícias de Tecnologia.
-    // Substitua a URL pela rota correta da sua API.
-    fetch('http://localhost:5000/api/articles?category=Technology') // Use "Technology" com a primeira letra maiúscula
+    // Faça uma requisição para a API que retorna as notícias de Tecnologia.
+    fetch('http://localhost:5000/api/articles?category=Technology')
       .then((response) => response.json())
       .then((data) => {
-        // Filtra apenas as notícias da categoria "Tecnologia"
-        const technologyNewsFiltered = data.filter((article: NewsItem) => article.category === 'Technology');
-        setTechnologyNews(technologyNewsFiltered);
+        setTechnologyNews(data); // Define os dados das notícias de Tecnologia no estado
       })
       .catch((error) => {
         console.error('Erro ao buscar notícias de Tecnologia:', error);
       });
   }, []);
 
+  // Filtra as notícias da categoria Tecnologia
+  const technologyNewsFiltered = technologyNews.filter((article) => article.category === 'Technology');
+
   return (
     <div>
-      <h1>Notícias de Tecnologia</h1>
-      <ul>
-        {technologyNews.map((article) => (
-          <li key={article._id}>
-            <h2>{article.title}</h2>
-            <p>{article.content}</p>
-            <p>{article.category}</p>
-            
-            {/* Renderize as imagens e outros detalhes do artigo, se necessário */}
-          </li>
-        ))}
-      </ul>
+      <h1 className='text-2xl font-semibold mb-3'>Notícias de Tecnologia</h1>
+      {technologyNewsFiltered.map((article) => (
+        <News
+          key={article._id}
+          slug={article.slug}
+          title={article.title}
+          // content={article.content}
+          category={article.category}
+          images={article.images.map(img => img.replace(/\\/g, '/'))} // Corrige o caminho da imagem se necessário
+          content={''}        />
+      ))}
     </div>
   );
 };

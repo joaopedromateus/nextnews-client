@@ -16,17 +16,17 @@ const News: React.FC<NewsProps> = ({ slug, title, content, category, images }) =
       {images && images.map((image, index) => (
         <div key={index} className="relative">
           <img 
-            src={image} 
-            alt={`Imagem de ${title}`} 
-            className="w-full max-w-md rounded-lg object-cover" // Estilos Tailwind para a imagem
-            style={{ maxWidth: '500px' }}
+            src={`/${image.replace(/\\/g, '/')}`} // Ajustando o caminho
+            alt={`Imagem de ${title}`}
+            className="w-full max-w-md rounded-lg object-cover"
+            style={{ width: '500px' }}
           />
           <Link href={`/news/${slug}`}>
-            <p className="absolute bottom-0 left-0 p-3 bg-black bg-opacity-50 w-full max-w-md rounded-b-lg">
+            <div className="absolute bottom-0 left-0 p-3 bg-black bg-opacity-50 w-full max-w-md rounded-b-lg">
               <h2 className="text-2xl font-semibold text-white hover:underline">
                 {title}
               </h2>
-            </p>
+            </div>
           </Link>
         </div>
       ))}

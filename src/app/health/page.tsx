@@ -1,6 +1,7 @@
 // app/health/healthPage.tsx
 "use client"
 // healthPage.tsx
+// healthPage.tsx
 import React, { useEffect, useState } from 'react';
 import News from '../components/News'; // Importe o componente News
 
@@ -11,7 +12,7 @@ type NewsItem = {
   content: string;
   category: string;
   images: string[];
-  // Adicione outras propriedades conforme necessário
+  slug: string; // Certifique-se de que a propriedade slug esteja definida no seu modelo
 };
 
 const HealthPage: React.FC = () => {
@@ -19,8 +20,7 @@ const HealthPage: React.FC = () => {
 
   useEffect(() => {
     // Faça uma requisição para a API que retorna as notícias de Saúde.
-    // Substitua a URL pela rota correta da sua API.
-    fetch('http://localhost:5000/api/articles?category=Health') // Use "Health" com a primeira letra maiúscula
+    fetch('http://localhost:5000/api/articles?category=Health')
       .then((response) => response.json())
       .then((data) => {
         setHealthNews(data); // Define os dados das notícias de Saúde no estado
@@ -30,19 +30,21 @@ const HealthPage: React.FC = () => {
       });
   }, []);
 
+  // Filtra as notícias da categoria Health
+  const healthNewsFiltered = healthNews.filter((article) => article.category === 'Health');
+
   return (
     <div>
-      <h1>Notícias de Saúde</h1>
-      {healthNews.map((article) => (
-        // Use o componente News para renderizar cada notícia de Saúde
+      <h1 className='text-2xl font-semibold mb-3'>Notícias de Saúde</h1>
+      {healthNewsFiltered.map((article) => (
         <News
           key={article._id}
-          slug={article.slug} // Use o ID como slug, você pode ajustar isso conforme necessário
+          slug={article.slug}
           title={article.title}
           // content={article.content}
           category={article.category}
-          images={article.images}
-        />
+          images={article.images.map(img => img.replace(/\\/g, '/'))} // Corrige o caminho da imagem se necessário
+          content={''}        />
       ))}
     </div>
   );

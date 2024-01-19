@@ -1,4 +1,3 @@
-//client/app/news/[slug]/page.tsx
 'use client'
 import { useEffect, useState } from 'react';
 
@@ -32,17 +31,23 @@ const NewsPage = ({ params }: { params: RouteParams }) => {
   }, [params]);
 
   if (!article) {
-    return <div>Loading...</div>;
+    return (
+      <div className="text-center mt-8">
+        <p className="text-xl font-semibold">Carregando...</p>
+      </div>
+    );
   }
 
   return (
-    <div>
-      {/* <h1>Slug: {params.slug}</h1> */}
-      <h1> {article.title}</h1>
-      <p>Category: {article.category}</p>
-      <img src={article.images} alt="Imagem da notícia" className='w-[600px] rounded-md'/>
-      <p>{article.content}</p>
-
+    <div className="max-w-4xl mx-auto p-4 mb-3">
+      <h1 className="text-3xl font-bold mb-4">{article.title}</h1>
+      <p className="text-gray-600 mb-2">Categoria: {article.category}</p>
+      <img
+        src={`http://localhost:5000/${article.images}`} // Use a URL completa para a imagem
+        alt="Imagem da notícia"
+        className='w-[700px] rounded-md mb-4'
+      />
+      <p className="text-xl leading-7">{article.content}</p>
     </div>
   );
 }
