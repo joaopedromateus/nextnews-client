@@ -13,6 +13,7 @@ const AdminPage: React.FC = () => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [redirectMessage, setRedirectMessage] = useState('');
+  const [newsList, setNewsList] = useState([]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
     setFormData({
@@ -23,7 +24,7 @@ const AdminPage: React.FC = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    setIsLoggedIn(false); // Define como não autenticado após o logout
+    setIsLoggedIn(false);
     setRedirectMessage('Você fez logout. Redirecionando para a página de login...');
     setTimeout(() => {
       window.location.href = '/login';
@@ -47,49 +48,30 @@ const AdminPage: React.FC = () => {
   });
 };
 
-
-   // Atualiza o estado para as imagens
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setFormData({ ...formData, images: e.target.files });
     }
   };
 
+  const formatDate = (dateString: string) => {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
 
-// Envia os dados do formulário
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Código para enviar os dados do formulário
+  };
 
-    const data = new FormData();
-    data.append('slug', formData.slug);
-    data.append('title', formData.title);
-    data.append('category', formData.category);
-    data.append('content', formData.content);
-    // Adiciona imagens ao FormData
-    if (formData.images) {
-      Array.from(formData.images).forEach(image => {
-        data.append('images', image);
-      });
-    }
-
+  const fetchNewsList = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/articles', {
-        method: 'POST',
-        body: data, // Agora enviando FormData
-      });
-
+      const response = await fetch('http://localhost:5000/api/articles');
       if (response.ok) {
-        console.log('Notícia enviada com sucesso!');
-        // Limpa o formulário após o envio
-        setFormData({
-          slug: '',
-          title: '',
-          category: '',
-          content: '',
-          images: null,
-        });
+        const data = await response.json();
+        setNewsList(data);
       } else {
-        console.error('Erro ao enviar a notícia');
+        console.error('Erro ao buscar a lista de notícias');
       }
     } catch (error) {
       console.error('Erro ao conectar ao servidor:', error);
@@ -101,34 +83,43 @@ const AdminPage: React.FC = () => {
     const token = localStorage.getItem('token');
     if (token) {
       setIsLoggedIn(true);
-      setRedirectMessage('Você já está autenticado. Redirecionando para a página de admin...');
-      setTimeout(() => {
-        setRedirectMessage('');
-      }, 2000);
+      fetchNewsList(); // Carrega a lista de notícias após o login
     } else {
-      // Se não estiver logado, mostre a mensagem e redirecione
+      // Se não estiver logado, redirecione imediatamente para a página de login
       setRedirectMessage('Você não está logado. Redirecionando para a página de login...');
       setTimeout(() => {
         window.location.href = '/login';
-      }, 2000);
+      }, 0); // Altere para 0 para redirecionar imediatamente
     }
-  }, []); // Executar apenas uma vez, quando o componente é montado
+  }, []);
 
-  // Renderize o conteúdo somente se o usuário estiver logado
-  if (!isLoggedIn) {
-    return (
-      <div>
-        {redirectMessage}
-      </div>
-    );
-  }
+  const handleDeleteNews = async (slug: string) => {
+    const confirmDelete = window.confirm('Deseja realmente excluir esta notícia?');
+    if (confirmDelete) {
+      try {
+        const response = await fetch(`http://localhost:5000/api/articles/${slug}`, {
+          method: 'DELETE',
+        });
 
+        if (response.ok) {
+          fetchNewsList();
+        } else {
+          console.error('Erro ao excluir a notícia');
+        }
+      } catch (error) {
+        console.error('Erro ao conectar ao servidor:', error);
+      }
+    }
+  };
 
   return (
-
-    <div className="admin-form-container p-4">
-      <h1 className="text-xl font-semibold mb-4">Cadastrar Nova Notícia</h1>
-      <form onSubmit={handleSubmit}>
+    <div className={`flex flex-col items-center ${isLoggedIn ? '' : 'hidden'}`}>
+      {isLoggedIn ? (
+        <div>
+          <div className="admin-form-container p-4 w-full max-w-md">
+            {/* Formulário de adicionar notícias */}
+            <h1 className="text-xl font-semibold mb-4">Cadastrar Nova Notícia</h1>
+          <form onSubmit={handleSubmit}>
     <div className="mb-4">
       <label className="block font-medium">Título:</label>
       <input
@@ -192,10 +183,38 @@ const AdminPage: React.FC = () => {
     <button type="submit" className="bg-blue-500 text-white rounded-md px-4 py-2">
       Enviar Notícia
     </button>
-  </form>
-      <button onClick={handleLogout} className="bg-red-500 text-white rounded-md px-4 mt-3 py-2">
-        Sair
-      </button>
+       </form>
+          </div>
+
+          <div className="w-full max-w-md mt-4">
+            <h2 className="text-lg font-semibold mb-2">Lista de Notícias</h2>
+          <ul>
+  {newsList.map((news: any, index: number) => (
+    <li key={news.slug} className={`flex justify-between items-center mb-2 rounded-lg p-2 ${index % 2 === 0 ? 'bg-black' : 'bg-gray-800'}`}>
+      <div>
+      <p>{news.title}</p>
+      <p>Data de Publicação: {formatDate(news.publishDate)}</p>
+      </div>
+      <div>
+      <button className="text-red-500" onClick={() => handleDeleteNews(news.slug)}>X</button>
+      </div>
+      </li>
+      ))}
+      </ul>
+          </div>
+
+          <button
+            onClick={handleLogout}
+            className="bg-red-500 text-white rounded-md px-4 mt-3 py-2 mb-10"
+          >
+            Sair
+          </button>
+        </div>
+      ) : (
+        <div className="text-center mt-8 text-gray-700">
+          <p>{redirectMessage}</p>
+        </div>
+      )}
     </div>
   );
 };
