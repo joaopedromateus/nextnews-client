@@ -35,7 +35,7 @@ const Home: React.FC = () => {
         <h2 className="text-2xl font-semibold mb-3">Notícias Recentes:</h2>
         {newsData.map((news) => (
           // Passando o slug diretamente para o componente News
-          <News key={news._id} title={news.title} slug={news.slug}  category={news.category} images={news.images}/>
+          <News key={news._id} title={news.title} slug={news.slug} category={news.category} images={news.images} content={''}/>
         ))}
       </section>
   
