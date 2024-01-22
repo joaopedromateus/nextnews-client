@@ -8,12 +8,15 @@ const AdminPage: React.FC = () => {
     title: '',
     category: '',
     content: '',
-    images: null as any,
+    images: [], // Inicializa como um array vazio
   });
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [redirectMessage, setRedirectMessage] = useState('');
   const [newsList, setNewsList] = useState([]);
+  const [successMessage, setSuccessMessage] = useState('');
+
+  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
     setFormData({
@@ -31,37 +34,73 @@ const AdminPage: React.FC = () => {
     }, 2000);
   };
 
-  // Gerador de Slug
-  const handleGenerateSlug = () => {
-  const title = formData.title;
-  const slug = title
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "") // Remove acentos
-    .replace(/[^\w\s]/g, "") // Remove pontuação
-    .replace(/\s+/g, "-") // Substitui espaços por hifens
-    .replace(/ç/g, "c") // Substitui "ç" por "c"
-    .trim(); // Remove espaços em branco extras
-  setFormData({
-    ...formData,
-    slug: slug,
-  });
+const submitForm = async () => {
+  const submissionFormData = new FormData();
+  submissionFormData.append('slug', formData.slug);
+  submissionFormData.append('title', formData.title);
+  submissionFormData.append('category', formData.category);
+  submissionFormData.append('content', formData.content);
+  
+  if (formData.images && formData.images.length > 0) {
+    Array.from(formData.images).forEach(file => {
+      submissionFormData.append('images', file);
+    });
+  }
+
+  try {
+    const response = await fetch('http://localhost:5000/api/articles', {
+      method: 'POST',
+      body: submissionFormData, // Enviando FormData
+    });
+
+    if (response.ok) {
+      // Exibir alerta de sucesso
+      alert('Notícia cadastrada com sucesso!');
+      // Recarregar a página
+      window.location.reload();
+    } else {
+      // Trate aqui os erros de resposta não bem-sucedidos
+      alert('Erro ao enviar o formulário. Por favor, tente novamente.');
+    }
+  } catch (error) {
+    console.error('Erro ao conectar ao servidor:', error);
+    alert('Erro ao conectar ao servidor. Por favor, verifique sua conexão.');
+  }
 };
 
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await submitForm(); // Chame a função que envia os dados do formulário.
+  };
+
+  // Gerador de Slug
+  const handleGenerateSlug = () => {
+    const title = formData.title;
+    const slug = title
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "") // Remove acentos
+      .replace(/[^\w\s]/g, "") // Remove pontuação
+      .replace(/\s+/g, "-") // Substitui espaços por hifens
+      .replace(/ç/g, "c") // Substitui "ç" por "c"
+      .trim(); // Remove espaços em branco extras
+    setFormData({
+      ...formData,
+      slug: slug,
+    });
+  };
+
+  // Atualiza o estado para as imagens
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setFormData({ ...formData, images: e.target.files });
+      setFormData({ ...formData, images: Array.from(e.target.files) });
     }
   };
 
   const formatDate = (dateString: string) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // Código para enviar os dados do formulário
   };
 
   const fetchNewsList = async () => {
@@ -79,17 +118,15 @@ const AdminPage: React.FC = () => {
   };
 
   useEffect(() => {
-    // Verifique se o usuário está logado
     const token = localStorage.getItem('token');
     if (token) {
       setIsLoggedIn(true);
-      fetchNewsList(); // Carrega a lista de notícias após o login
+      fetchNewsList(); 
     } else {
-      // Se não estiver logado, redirecione imediatamente para a página de login
       setRedirectMessage('Você não está logado. Redirecionando para a página de login...');
       setTimeout(() => {
         window.location.href = '/login';
-      }, 0); // Altere para 0 para redirecionar imediatamente
+      }, 0);
     }
   }, []);
 
