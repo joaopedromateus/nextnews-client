@@ -99,8 +99,14 @@ const submitForm = async () => {
   };
 
   const formatDate = (dateString: string) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+  const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+
+    return `${day}/${month}/${year} - ${hours}:${minutes}h`;
   };
 
   const fetchNewsList = async () => {
@@ -186,17 +192,23 @@ const submitForm = async () => {
         GERAR
       </button>
     </div>
-    <div className="mb-4">
-      <label className="block font-medium">Categoria:</label>
-      <input
-        type="text"
-        name="category"
-        value={formData.category}
-        onChange={handleChange}
-        required
-        className="rounded-md px-3 py-2 border text-black" // Adicione a classe text-black aqui
-      />
-    </div>
+  <div className="mb-4">
+  <label className="block font-medium">Categoria:</label>
+  <select
+    name="category"
+    value={formData.category}
+    onChange={handleChange}
+    required
+    className="rounded-md px-3 py-2 border text-black" // Estilo do dropdown
+  >
+    <option value="">Selecione uma categoria</option>
+    <option value="Health">Saúde</option>
+    <option value="Security">Segurança</option>
+    <option value="Internet">Internet</option>
+    <option value="Technology">Tecnologia</option>
+    {/* Adicione mais opções de categoria conforme necessário */}
+  </select>
+</div>
     <div className="mb-4">
       <label className="block font-medium">Conteúdo:</label>
       <textarea
