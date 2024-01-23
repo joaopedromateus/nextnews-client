@@ -1,11 +1,34 @@
 'use client'
 import { useEffect, useState } from 'react';
+import { FaWhatsapp, FaFacebook, FaTelegramPlane, FaTwitter } from 'react-icons/fa';
+
 
 interface RouteParams {
   slug: string;
 }
 
 const NewsPage = ({ params }: { params: RouteParams }) => {
+
+  const shareUrl = window.location.href; // URL da página atual
+  const shareText = "Confira esta notícia: "; // Texto para compartilhamento
+
+ const shareToWhatsApp = () => {
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + shareUrl)}`);
+  };
+
+  const shareToFacebook = () => {
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`);
+  };
+
+  const shareToTwitter = () => {
+    window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`);
+  };
+
+  const shareToTelegram = () => {
+    window.open(`https://telegram.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`);
+  };
+
+
   const [article, setArticle] = useState<any>(null);
 
   const formatDate = (dateString: string) => {
@@ -63,6 +86,14 @@ const NewsPage = ({ params }: { params: RouteParams }) => {
         className='w-[700px] rounded-md mb-4'
       />
       <p className="text-xl leading-7">{article.content}</p>
+      {/* Seção de Compartilhamento */}
+      <div className="flex justify-center mt-3 mb-3">
+        <p className="mr-2">Compartilhar:</p>
+        <button onClick={shareToWhatsApp} aria-label="Compartilhar no WhatsApp"><FaWhatsapp size={24} /></button>
+        <button onClick={shareToFacebook} aria-label="Compartilhar no Facebook" className="mx-2"><FaFacebook size={24} /></button>
+        <button onClick={shareToTwitter} aria-label="Compartilhar no Twitter" className="mx-2"><FaTwitter size={24} /></button>
+        <button onClick={shareToTelegram} aria-label="Compartilhar no Telegram"><FaTelegramPlane size={24} /></button>
+      </div>
     </div>
   );
 }
