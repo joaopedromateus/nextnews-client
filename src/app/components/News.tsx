@@ -8,11 +8,10 @@ type NewsProps = {
   content: string;
   category: string;
   images: string[];
-  publishDate: string; // Adicionando publishDate
+  publishDate: string;
 };
 
 const News: React.FC<NewsProps> = ({ slug, title, content, category, images, publishDate }) => {
-  // Função para formatar a data
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const day = date.getDate().toString().padStart(2, '0');
@@ -30,26 +29,24 @@ const News: React.FC<NewsProps> = ({ slug, title, content, category, images, pub
       {images && images.map((image, index) => (
         <div key={index} className="relative">
           <img 
-            src={`/${image.replace(/\\/g, '/')}`}
+            src={`http://localhost:5000/${image.replace(/\\/g, '/')}`}
             alt={`Imagem de ${title}`}
-            className="w-full  rounded-lg object-cover w-[500px]"
-            style={{ width: '500px' }}
+            className="w-full rounded-lg object-cover"
+            style={{ width: '500px', height: 'auto' }}
           />
-        <Link href={`/news/${slug}`}>
+          <Link href={`/news/${slug}`}>
             <div className="absolute bottom-0 left-0 p-3 bg-black bg-opacity-50 w-full max-w-md rounded-b-lg">
               <h2 className="text-2xl font-semibold text-white hover:underline">
                 {title}
               </h2>
             </div>
           </Link>
-          
         </div>
       ))}
       <p className="mt-2 text-gray-600">{content}</p>
       <div className="flex justify-between items-center">
         <p className="text-sm font-semibold">{category}</p>
         <p className="text-sm">{formattedDate}</p>
-
       </div>
     </div>
   );
