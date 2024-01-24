@@ -40,7 +40,7 @@ const SecurityPage: React.FC = () => {
           slug={article.slug}
           title={article.title}
           category={article.category}
-          images={article.images.map(img => img.replace(/\\/g, '/'))}
+          images={article.images}
           publishDate={article.publishDate}
           content={''}
         />
