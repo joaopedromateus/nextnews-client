@@ -1,18 +1,17 @@
-'use client'
-import { useEffect, useState } from 'react';
+// client/src/app/news/[slug]/page.tsx
+'use client';
+import React, { useEffect, useState } from 'react';
 import { FaWhatsapp, FaFacebook, FaTelegramPlane, FaTwitter } from 'react-icons/fa';
-
 
 interface RouteParams {
   slug: string;
 }
 
 const NewsPage = ({ params }: { params: RouteParams }) => {
-
   const shareUrl = window.location.href; // URL da página atual
   const shareText = "Confira esta notícia: "; // Texto para compartilhamento
 
- const shareToWhatsApp = () => {
+  const shareToWhatsApp = () => {
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + shareUrl)}`);
   };
 
@@ -27,7 +26,6 @@ const NewsPage = ({ params }: { params: RouteParams }) => {
   const shareToTelegram = () => {
     window.open(`https://telegram.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`);
   };
-
 
   const [article, setArticle] = useState<any>(null);
 

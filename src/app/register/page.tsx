@@ -1,12 +1,12 @@
 // client/src/app/register/page.tsx
-'use client'
+'use client';
 import React, { useState } from 'react';
 
 const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleRegister = async (e) => {
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {

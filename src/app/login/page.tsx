@@ -21,7 +21,7 @@ const Login = () => {
     }
   }, []); // Executar apenas uma vez, quando o componente é montado
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
@@ -50,6 +50,7 @@ const Login = () => {
       console.error('Erro ao fazer login:', error);
     }
   };
+
   return (
     <div className="flex justify-center items-center">
       <div className="bg-white shadow-md rounded-lg mt-[70px] p-6 w-96">
