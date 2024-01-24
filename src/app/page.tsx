@@ -6,7 +6,6 @@ type NewsItem = {
   _id: string;
   title: string;
   slug: string;
-  content: string;
   category: string;
   images: string[];
   publishDate: string;
@@ -51,15 +50,14 @@ const Home: React.FC = () => {
       <section>
         <h2 className="text-2xl font-semibold mb-3">Notícias Recentes:</h2>
         {newsData.map((news) => (
-          // Passando o slug diretamente para o componente News e a data formatada
+          // Passando todos os campos, exceto o conteúdo, diretamente para o componente News
           <News
             key={news._id}
-            images={news.images}
             title={news.title}
             slug={news.slug}
             category={news.category}
+            images={news.images}
             publishDate={news.publishDate} // Passando a data formatada
-            content={''}          
           />
         ))}
       </section>
