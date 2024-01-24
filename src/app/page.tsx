@@ -58,7 +58,7 @@ const Home: React.FC = () => {
             category={news.category}
             images={news.images}
             publishDate={news.publishDate} // Passando a data formatada
-            content={''}          />
+          />
         ))}
       </section>
     </main>
