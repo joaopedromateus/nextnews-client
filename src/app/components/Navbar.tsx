@@ -17,27 +17,28 @@ const Navbar = () => {
   }, []);
 
   return (
-    <header className="bg-gray-800 text-white w-full p-4">
+      
+    <header className="h-[60px] bg-gradient-to-r from-[#121532] to-[#121253] text-white w-[100%] flex flex-row text-white justify-center items-center ">
       <nav>
         <ul className="flex justify-center space-x-4">
           <li>
             <Link href="/" className="hover:text-gray-300">
-              Home
+              Últimas Notícias
             </Link>
           </li>
           <li>
             <Link href="/security" className="hover:text-gray-300">
-              Security
+              Segurança
             </Link>
           </li>
           <li>
             <Link href="/technology/" className="hover:text-gray-300">
-              Technology
+              Tecnologia
             </Link>
           </li>
           <li>
             <Link href="/health" className="hover:text-gray-300">
-              Health
+              Saúde
             </Link>
           </li>
           <li>
