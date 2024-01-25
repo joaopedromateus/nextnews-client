@@ -29,7 +29,7 @@ const News: React.FC<NewsProps> = ({ slug, title, content, category, images, pub
       {images && images.map((image, index) => (
         <div key={index} className="relative">
           <img 
-            src={`http://localhost:5000/${image.replace(/\\/g, '/')}`}
+            src={`https://backend-next-news-project.onrender.com/${image.replace(/\\/g, '/')}`}
             alt={`Imagem de ${title}`}
             className="w-full rounded-lg object-cover"
             style={{ width: '500px', height: 'auto' }}

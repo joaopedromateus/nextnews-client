@@ -5,7 +5,7 @@ const nextConfig = {
     return [
       {
         source: '/uploads/:path*',
-        destination: 'http://localhost:5000/uploads/:path*' // Proxy para o servidor backend
+        destination: 'https://backend-next-news-project.onrender.com/uploads/:path*' // Proxy para o servidor backend
       }]
   }
 }

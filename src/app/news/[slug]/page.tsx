@@ -44,7 +44,7 @@ const NewsPage = ({ params }: { params: RouteParams }) => {
     async function fetchData() {
       const { slug } = params;
       try {
-        const response = await fetch(`http://localhost:5000/api/articles/${slug}`);
+        const response = await fetch(`https://backend-next-news-project.onrender.com/api/articles/${slug}`);
         const articleData = await response.json();
 
         if (!articleData) {
@@ -79,7 +79,7 @@ const NewsPage = ({ params }: { params: RouteParams }) => {
       <p className="text-gray-600 mb-2">Categoria: {article.category}</p>
       <p className="text-gray-600 mb-2">Data de publicação: {article.publishDate} </p>
       <img
-        src={`http://localhost:5000/${article.images}`} // Use a URL completa para a imagem
+        src={`https://backend-next-news-project.onrender.com/${article.images}`} // Use a URL completa para a imagem
         alt="Imagem da notícia"
         className='w-[700px] rounded-md mb-4'
       />

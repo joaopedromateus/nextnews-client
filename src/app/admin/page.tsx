@@ -57,7 +57,7 @@ const AdminPage: React.FC = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/articles', {
+      const response = await fetch('https://backend-next-news-project.onrender.com/api/articles', {
         method: 'POST',
         body: submissionFormData, // Enviando FormData
       });
@@ -113,7 +113,7 @@ const AdminPage: React.FC = () => {
 
   const fetchNewsList = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/articles');
+      const response = await fetch('https://backend-next-news-project.onrender.com/api/articles');
       if (response.ok) {
         const data = await response.json();
         setNewsList(data);
@@ -142,7 +142,7 @@ const AdminPage: React.FC = () => {
     const confirmDelete = window.confirm('Deseja realmente excluir esta notícia?');
     if (confirmDelete) {
       try {
-        const response = await fetch(`http://localhost:5000/api/articles/${slug}`, {
+        const response = await fetch(`https://backend-next-news-project.onrender.com/api/articles/${slug}`, {
           method: 'DELETE',
         });
 

@@ -17,7 +17,7 @@ const TechnologyPage: React.FC = () => {
   const [technologyNews, setTechnologyNews] = useState<NewsItem[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/articles?category=Technology')
+    fetch('https://backend-next-news-project.onrender.com/api/articles?category=Technology')
       .then((response) => response.json())
       .then((data) => {
         // Inverta a ordem das notícias de Tecnologia para que as mais recentes apareçam primeiro

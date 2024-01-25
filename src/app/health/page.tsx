@@ -17,7 +17,7 @@ const HealthPage: React.FC = () => {
   const [healthNews, setHealthNews] = useState<NewsItem[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/articles?category=Health')
+    fetch('https://backend-next-news-project.onrender.com/api/articles?category=Health')
       .then((response) => response.json())
       .then((data) => {
         // Inverta a ordem das notícias de Saúde para que as mais recentes apareçam primeiro
