@@ -26,9 +26,9 @@ const Footer = () => {
   }, []);
 
   return (
-    <footer className="bg-gray-800 text-center fixed bottom-0 p-4 w-full footer bg-opacity-0 transition-all duration-300  bg-gradient-to-r from-[#121532] to-[#121253] text-white w-[100%] flex flex-row  justify-center items-center ">
-      <div className="footer-content opacity-0 transition-opacity duration-300">
-        <p className='text-white'>&copy; {new Date().getFullYear()} News Portal - João Pedro Mateus da Silva</p>
+    <footer className="bg-gradient-to-r from-[#121532] to-[#121253] text-white text-center fixed bottom-0 p-4 w-full footer bg-opacity-0 transition-all duration-300 opacity-0 transition-opacity duration-300">
+      <div className="footer-content">
+        <p>&copy; {new Date().getFullYear()} News Portal</p>
       </div>
     </footer>
   );
