@@ -1,5 +1,6 @@
 'use client'
 import { useEffect } from 'react';
+import { FaLinkedin, FaGithub } from 'react-icons/fa';
 
 const Footer = () => {
   // Função para controlar a classe "bg-opacity-0" com base no scroll da tela
@@ -26,9 +27,23 @@ const Footer = () => {
   }, []);
 
   return (
-    <footer className="bg-gradient-to-r from-[#121532] to-[#121253] text-white text-center fixed bottom-0 p-4 w-full footer bg-opacity-0 transition-all duration-300 opacity-0 transition-opacity duration-300">
-      <div className="footer-content">
-        <p>&copy; {new Date().getFullYear()} News Portal</p>
+    <footer className="bg-black text-white text-center fixed bottom-0 p-4 w-full footer bg-opacity-0 transition-all duration-300">
+      <div className="footer-content opacity-0 transition-opacity duration-300">
+        <p>&copy; {new Date().getFullYear()} News Portal - João Pedro Mateus da Silva</p>
+        <div className="mt-2">
+          <a href="https://www.linkedin.com/in/joaopedromateusdasilva/" target="_blank" rel="noopener noreferrer">
+            <span className="mr-2">
+              <FaLinkedin />
+            </span>
+            LinkedIn
+          </a>
+          <a href="https://github.com/joaopedromateus" target="_blank" rel="noopener noreferrer" className="ml-4">
+            <span className="mr-2">
+              <FaGithub />
+            </span>
+            GitHub
+          </a>
+        </div>
       </div>
     </footer>
   );
