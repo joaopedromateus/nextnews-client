@@ -166,7 +166,7 @@ const AdminPage: React.FC = () => {
             <h1 className="text-xl font-semibold mb-4">Cadastrar Nova Notícia</h1>
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
-                <label className="block font-medium text-black">Título:</label>
+                <label className="block font-medium text-white">Título:</label>
                 <input
                   type="text"
                   name="title"
@@ -177,7 +177,7 @@ const AdminPage: React.FC = () => {
                 />
               </div>
               <div className="mb-4">
-                <label className="block font-medium text-black">Slug:</label>
+                <label className="block font-medium text-white">Slug:</label>
                 <input
                   type="text"
                   name="slug"
@@ -195,7 +195,7 @@ const AdminPage: React.FC = () => {
                 </button>
               </div>
               <div className="mb-4">
-                <label className="block font-medium">Categoria:</label>
+                <label className="block font-medium text-white">Categoria:</label>
                 <select
                   name="category"
                   value={formData.category}
@@ -212,7 +212,7 @@ const AdminPage: React.FC = () => {
                 </select>
               </div>
               <div className="mb-4">
-                <label className="block font-medium text-black">Conteúdo:</label>
+                <label className="block font-medium text-white">Conteúdo:</label>
                 <textarea
                   name="content"
                   value={formData.content}
@@ -222,7 +222,7 @@ const AdminPage: React.FC = () => {
                 />
               </div>
               <div className="mb-4">
-                <label className="block font-medium">Imagens:</label>
+                <label className="block font-medium text-white">Imagens:</label>
                 <input
                   type="file"
                   name="images"
