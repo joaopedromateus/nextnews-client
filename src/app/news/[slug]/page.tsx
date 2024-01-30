@@ -87,10 +87,10 @@ const NewsPage = ({ params }: { params: RouteParams }) => {
       {/* Seção de Compartilhamento */}
       <div className="flex justify-center mt-3 mb-3">
         <p className="mr-2">Compartilhar:</p>
-        <button onClick={shareToWhatsApp} aria-label="Compartilhar no WhatsApp"><FaWhatsapp size={24} /></button>
-        <button onClick={shareToFacebook} aria-label="Compartilhar no Facebook" className="mx-2"><FaFacebook size={24} /></button>
-        <button onClick={shareToTwitter} aria-label="Compartilhar no Twitter" className="mx-2"><FaTwitter size={24} /></button>
-        <button onClick={shareToTelegram} aria-label="Compartilhar no Telegram"><FaTelegramPlane size={24} /></button>
+        <button onClick={shareToWhatsApp} aria-label="Compartilhar no WhatsApp"><FaWhatsapp size={24} className="text-white" /></button>
+        <button onClick={shareToFacebook} aria-label="Compartilhar no Facebook" className="mx-2"><FaFacebook size={24} className="text-white" /></button>
+        <button onClick={shareToTwitter} aria-label="Compartilhar no Twitter" className="mx-2"><FaTwitter size={24} className="text-white" /></button>
+        <button onClick={shareToTelegram} aria-label="Compartilhar no Telegram"><FaTelegramPlane size={24} className="text-white" /></button>
       </div>
     </div>
   );
