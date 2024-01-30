@@ -166,25 +166,25 @@ const AdminPage: React.FC = () => {
             <h1 className="text-xl font-semibold mb-4">Cadastrar Nova Notícia</h1>
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
-                <label className="block font-medium">Título:</label>
+                <label className="block font-medium text-black">Título:</label>
                 <input
                   type="text"
                   name="title"
                   value={formData.title}
                   onChange={handleChange}
                   required
-                  className="rounded-md px-3 py-2 border text-black" // Adicione a classe text-black aqui
+                  className="rounded-md px-3 py-2 border text-black w-[406px] "
                 />
               </div>
               <div className="mb-4">
-                <label className="block font-medium">Slug:</label>
+                <label className="block font-medium text-black">Slug:</label>
                 <input
                   type="text"
                   name="slug"
                   value={formData.slug}
                   onChange={handleChange}
                   required
-                  className="rounded-md px-3 py-2 border text-black" // Adicione a classe text-black aqui
+                  className="rounded-md px-3 py-2 border text-black w-[320px]" 
                 />
                 <button
                   type="button"
@@ -212,13 +212,13 @@ const AdminPage: React.FC = () => {
                 </select>
               </div>
               <div className="mb-4">
-                <label className="block font-medium">Conteúdo:</label>
+                <label className="block font-medium text-black">Conteúdo:</label>
                 <textarea
                   name="content"
                   value={formData.content}
                   onChange={handleChange}
                   required
-                  className="rounded-md px-3 py-2 border text-black" // Adicione a classe text-black aqui
+                  className="rounded-md px-3 py-2 border text-black w-[406px]" 
                 />
               </div>
               <div className="mb-4">
@@ -228,7 +228,7 @@ const AdminPage: React.FC = () => {
                   name="images"
                   onChange={handleImageChange}
                   multiple
-                  className="rounded-md px-3 py-2 border"
+                  className="rounded-md px-3 py-2 border text-white"
                 />
               </div>
               <button type="submit" className="bg-blue-500 text-white rounded-md px-4 py-2">
