@@ -1,13 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-
   async rewrites() {
     return [
       {
         source: '/uploads/:path*',
-        destination: 'https://backend-next-news-project.onrender.com/uploads/:path*' // Proxy para o servidor backend
+        destination: 'https://nextnewsproject.s3.sa-east-1.amazonaws.com/news-images/:path*' // Direciona diretamente para o bucket do S3
       }]
   }
 }
 
-module.exports = nextConfig
+module.exports = nextConfig;
