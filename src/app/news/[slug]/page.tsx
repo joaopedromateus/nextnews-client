@@ -79,7 +79,7 @@ const NewsPage = ({ params }: { params: RouteParams }) => {
       <p className="text-gray-600 mb-2">Categoria: {article.category}</p>
       <p className="text-gray-600 mb-2">Data de publicação: {article.publishDate} </p>
       <img
-        src={`https://backend-next-news-project.onrender.com/${article.images}`} // Use a URL completa para a imagem
+        src={`${article.images}`}
         alt="Imagem da notícia"
         className='w-[700px] rounded-md mb-4'
       />
