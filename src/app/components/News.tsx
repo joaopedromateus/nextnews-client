@@ -28,12 +28,13 @@ const News: React.FC<NewsProps> = ({ slug, title, content, category, images, pub
     <div className="mb-8">
       {images && images.map((image, index) => (
         <div key={index} className="relative">
-          <img 
-            src={`https://nextnewsproject.s3.sa-east-1.amazonaws.com/news-images/${image}`}
-            alt={`Imagem de ${title}`}
-            className="w-full rounded-lg object-cover"
-            style={{ width: '500px', height: 'auto' }}
-          />
+<img 
+  src={`https://nextnewsproject.s3.sa-east-1.amazonaws.com/news-images/${image}`}
+  alt={`Imagem de ${title}`}
+  className="w-full rounded-lg object-cover"
+  style={{ width: '500px', height: 'auto' }}
+/>
+
           <Link href={`/news/${slug}`}>
             <div className="absolute bottom-0 left-0 p-3 bg-black bg-opacity-50 w-full max-w-md rounded-b-lg">
               <h2 className="text-2xl font-semibold text-white hover:underline">
