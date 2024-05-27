@@ -17,7 +17,7 @@ const InternetPage: React.FC = () => {
   const [internetNews, setInternetNews] = useState<NewsItem[]>([]);
 
   useEffect(() => {
-    fetch('https://backend-next-news-project.onrender.com/api/articles?category=Internet')
+    fetch('http://localhost:5000/api/articles?category=Internet')
       .then((response) => response.json())
       .then((data) => {
         // Inverta a ordem das notícias de Internet para que as mais recentes apareçam primeiro

@@ -44,7 +44,7 @@ const NewsPage = ({ params }: { params: RouteParams }) => {
     async function fetchData() {
       const { slug } = params;
       try {
-        const response = await fetch(`https://backend-next-news-project.onrender.com/api/articles/${slug}`);
+        const response = await fetch(`http://localhost:5000/api/articles/${slug}`);
         const articleData = await response.json();
 
         if (!articleData) {

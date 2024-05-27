@@ -17,7 +17,7 @@ const SecurityPage: React.FC = () => {
   const [securityNews, setSecurityNews] = useState<NewsItem[]>([]);
 
   useEffect(() => {
-    fetch('https://backend-next-news-project.onrender.com/api/articles?category=Security')
+    fetch('http://localhost:5000/api/articles?category=Security')
       .then((response) => response.json())
       .then((data) => {
         // Inverta a ordem das notícias de Segurança para que as mais recentes apareçam primeiro

@@ -33,16 +33,17 @@ const Home: React.FC = () => {
   const [newsData, setNewsData] = useState<NewsItem[]>([]);
 
   useEffect(() => {
-    fetch('https://backend-next-news-project.onrender.com/api/articles')
-      .then((response) => response.json())
-      .then((data) => {
-        // Inverta a ordem das notícias para que as mais recentes apareçam primeiro
-        const reversedData = data.reverse();
-        setNewsData(reversedData);
-      })
-      .catch((error) => {
-        console.error('Erro ao buscar notícias:', error);
-      });
+    fetch('http://localhost:5000/api/articles')
+      
+        .then((response) => response.json())
+        .then((data) => {
+          // Inverta a ordem das notícias para que as mais recentes apareçam primeiro
+          const reversedData = data.reverse();
+          setNewsData(reversedData);
+        })
+        .catch((error) => {
+          console.error("Erro ao buscar notícias:", error);
+        });
   }, []);
 
   return (

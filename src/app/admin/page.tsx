@@ -1,242 +1,214 @@
-// client/src/app/admin/page.tsx
-'use client'
-import React, { useState, useEffect } from 'react';
-
+"use client";
+import { useState, useEffect } from "react";
 
 const AdminPage: React.FC = () => {
-  const [formData, setFormData] = useState({
-    slug: '',
-    title: '',
-    category: '',
-    content: '',
-    images: [] as File[], // Defina images como um array vazio de File
-  });
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [redirectMessage, setRedirectMessage] = useState('');
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [category, setCategory] = useState("");
+  const [slug, setSlug] = useState("");
+  const [image, setImage] = useState(null);
   const [newsList, setNewsList] = useState([]);
-  const [successMessage, setSuccessMessage] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [redirectMessage, setRedirectMessage] = useState("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const selectedImages = Array.from(e.target.files) as File[]; // Cast to File[]
-      setFormData({
-        ...formData,
-        images: selectedImages,
-      });
-    }
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    setIsLoggedIn(false);
-    setRedirectMessage('Você fez logout. Redirecionando para a página de login...');
-    setTimeout(() => {
-      window.location.href = '/login';
-    }, 2000);
-  };
-
-  const submitForm = async () => {
-    const submissionFormData = new FormData();
-    submissionFormData.append('slug', formData.slug);
-    submissionFormData.append('title', formData.title);
-    submissionFormData.append('category', formData.category);
-    submissionFormData.append('content', formData.content);
-
-    if (formData.images && formData.images.length > 0) {
-      Array.from(formData.images).forEach(file => {
-        submissionFormData.append('images', file);
-      });
-    }
-
-    try {
-      const response = await fetch('https://backend-next-news-project.onrender.com/api/articles', {
-        method: 'POST',
-        body: submissionFormData, // Enviando FormData
-      });
-
-      if (response.ok) {
-        // Exibir alerta de sucesso
-        alert('Notícia cadastrada com sucesso!');
-        // Recarregar a página
-        window.location.reload();
-      } else {
-        // Trate aqui os erros de resposta não bem-sucedidos
-        alert('Erro ao enviar o formulário. Por favor, tente novamente.');
-      }
-    } catch (error) {
-      console.error('Erro ao conectar ao servidor:', error);
-      alert('Erro ao conectar ao servidor. Por favor, verifique sua conexão.');
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await submitForm(); // Chame a função que envia os dados do formulário.
-  };
-
-  // Gerador de Slug
+    
   const handleGenerateSlug = () => {
-    const title = formData.title;
-    const slug = title
+    const slugValue = title
       .toLowerCase()
       .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "") // Remove acentos
-      .replace(/[^\w\s]/g, "") // Remove pontuação
-      .replace(/\s+/g, "-") // Substitui espaços por hifens
-      .replace(/ç/g, "c") // Substitui "ç" por "c"
-      .trim(); // Remove espaços em branco extras
-    setFormData({
-      ...formData,
-      slug: slug,
-    });
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^\w\s-]/g, "")
+      .trim()
+      .replace(/\s+/g, "-");
+    setSlug(slugValue);
   };
 
-  // Atualiza o estado para as imagens
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear();
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-
-    return `${day}/${month}/${year} - ${hours}:${minutes}h`;
-  };
-
-  const fetchNewsList = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      const response = await fetch('https://backend-next-news-project.onrender.com/api/articles');
-      if (response.ok) {
-        const data = await response.json();
-        setNewsList(data);
-      } else {
-        console.error('Erro ao buscar a lista de notícias');
-      }
-    } catch (error) {
-      console.error('Erro ao conectar ao servidor:', error);
+      const formData = new FormData();
+      formData.append("image", image);
+
+      const response = await fetch(
+        `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMG_BB_API_KEY}`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const imageData = await response.json();
+      const imageUrl = imageData.data.url;
+
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/articles`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          content,
+          category,
+          slug,
+          images: [imageUrl],
+        }),
+      });
+
+      alert("Artigo criado com sucesso!");
+    } catch (err) {
+      alert("Erro ao criar o artigo.");
+      console.error(err);
     }
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token) {
       setIsLoggedIn(true);
       fetchNewsList();
     } else {
-      setRedirectMessage('Você não está logado. Redirecionando para a página de login...');
+      setRedirectMessage(
+        "Você não está logado. Redirecionando para a página de login..."
+      );
       setTimeout(() => {
-        window.location.href = '/login';
+        window.location.href = "/login";
       }, 0);
     }
   }, []);
 
+  const fetchNewsList = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/articles");
+      if (response.ok) {
+        const data = await response.json();
+        setNewsList(data);
+      } else {
+        console.error("Erro ao buscar a lista de notícias");
+      }
+    } catch (error) {
+      console.error("Erro ao conectar ao servidor:", error);
+    }
+  };
+
   const handleDeleteNews = async (slug: string) => {
-    const confirmDelete = window.confirm('Deseja realmente excluir esta notícia?');
+    const confirmDelete = window.confirm(
+      "Deseja realmente excluir esta notícia?"
+    );
     if (confirmDelete) {
       try {
-        const response = await fetch(`https://backend-next-news-project.onrender.com/api/articles/${slug}`, {
-          method: 'DELETE',
-        });
+        const response = await fetch(
+          `http://localhost:5000/api/articles/${slug}`,
+          {
+            method: "DELETE",
+          }
+        );
 
         if (response.ok) {
           fetchNewsList();
         } else {
-          console.error('Erro ao excluir a notícia');
+          console.error("Erro ao excluir a notícia");
         }
       } catch (error) {
-        console.error('Erro ao conectar ao servidor:', error);
+        console.error("Erro ao conectar ao servidor:", error);
       }
     }
   };
 
-  return (
-    <div className={`flex flex-col items-center ${isLoggedIn ? '' : 'hidden'}`}>
-      {isLoggedIn ? (
-        <div>
-          <div className="admin-form-container p-4 w-full max-w-md">
-            {/* Formulário de adicionar notícias */}
-            <h1 className="text-xl font-semibold mb-4">Cadastrar Nova Notícia</h1>
-            <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label className="block font-medium text-white">Título:</label>
-                <input
-                  type="text"
-                  name="title"
-                  value={formData.title}
-                  onChange={handleChange}
-                  required
-                  className="rounded-md px-3 py-2 border text-black w-[406px] "
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block font-medium text-white">Slug:</label>
-                <input
-                  type="text"
-                  name="slug"
-                  value={formData.slug}
-                  onChange={handleChange}
-                  required
-                  className="rounded-md px-3 py-2 border text-black w-[320px]" 
-                />
-                <button
-                  type="button"
-                  onClick={handleGenerateSlug}
-                  className="bg-blue-500 text-white rounded-md px-3 py-2 ml-2"
-                >
-                  GERAR
-                </button>
-              </div>
-              <div className="mb-4">
-                <label className="block font-medium text-white">Categoria:</label>
-                <select
-                  name="category"
-                  value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })} // Atualizado para tratar o evento do select corretamente
-                  required
-                  className="rounded-md px-3 py-2 border text-black" // Estilo do dropdown
-                >
-                  <option value="">Selecione uma categoria</option>
-                  <option value="Health">Saúde</option>
-                  <option value="Security">Segurança</option>
-                  <option value="Internet">Internet</option>
-                  <option value="Technology">Tecnologia</option>
-                  {/* Adicione mais opções de categoria conforme necessário */}
-                </select>
-              </div>
-              <div className="mb-4">
-                <label className="block font-medium text-white">Conteúdo:</label>
-                <textarea
-                  name="content"
-                  value={formData.content}
-                  onChange={handleChange}
-                  required
-                  className="rounded-md px-3 py-2 border text-black w-[406px]" 
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block font-medium text-white">Imagens:</label>
-                <input
-                  type="file"
-                  name="images"
-                  onChange={handleImageChange}
-                  multiple
-                  className="rounded-md px-3 py-2 border text-white"
-                />
-              </div>
-              <button type="submit" className="bg-blue-500 text-white rounded-md px-4 py-2">
-                Enviar Notícia
-              </button>
-            </form>
-          </div>
 
+  // Atualiza o estado para as imagens
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+
+    return `${day}/${month}/${year} - ${hours}:${minutes}h`;
+  };
+  
+    const handleLogout = () => {
+      localStorage.removeItem("token");
+      setIsLoggedIn(false);
+      setRedirectMessage(
+        "Você fez logout. Redirecionando para a página de login..."
+      );
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 2000);
+    };
+
+  return (
+    <div className={`flex flex-col items-center ${isLoggedIn ? "" : "hidden"}`}>
+      {isLoggedIn ? (
+        <div className="container p-4 w-full max-w-md">
+          <h1 className="text-2xl font-bold mb-4">Criar Artigo</h1>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <label className="block">
+              <span className="text-gray-700">Título:</span>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="block w-full mt-1 p-2 text-black border border-gray-300 rounded-md"
+              />
+            </label>
+            <label className="block flex items-center">
+              <span className="text-gray-700 mr-2">Slug:</span>
+              <input
+                type="text"
+                value={slug}
+                onChange={(e) => setSlug(e.target.value)}
+                className="flex-1 p-2 text-black border border-gray-300 rounded-md"
+              />
+              <button
+                type="button"
+                onClick={handleGenerateSlug}
+                className="bg-blue-500 text-white rounded-md px-3 py-2 ml-2"
+              >
+                GERAR
+              </button>
+            </label>
+            <label className="block">
+              <span className="text-gray-700">Conteúdo:</span>
+              <textarea
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                className="block w-full mt-1 p-2 text-black border border-gray-300 rounded-md"
+              />
+            </label>
+            <label className="block">
+              <span className="text-gray-700">Categoria:</span>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="block w-full mt-1 p-2 text-black border border-gray-300 rounded-md"
+              >
+                <option value="">Selecione uma categoria</option>
+                <option value="Health">Saúde</option>
+                <option value="Security">Segurança</option>
+                <option value="Internet">Internet</option>
+                <option value="Technology">Tecnologia</option>
+                {/* Adicione mais opções de categoria conforme necessário */}
+              </select>
+            </label>
+
+            <label className="block">
+              <span className="text-gray-700">Imagem:</span>
+              <input
+                type="file"
+                onChange={(e) => setImage(e.target.files[0])}
+                className="block w-full mt-1 p-2 border border-gray-300 text-white rounded-md"
+              />
+            </label>
+            <button
+              type="submit"
+              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+            >
+              Criar Artigo
+            </button>
+          </form>
           <div className="w-full max-w-md mt-4">
             <h2 className="text-lg font-semibold mb-2">Lista de Notícias</h2>
             <ul>
@@ -244,7 +216,7 @@ const AdminPage: React.FC = () => {
                 <li
                   key={news.slug}
                   className={`flex justify-between items-center mb-2 rounded-lg p-2 ${
-                    index % 2 === 0 ? 'bg-black' : 'bg-gray-800'
+                    index % 2 === 0 ? "bg-black" : "bg-gray-800"
                   }`}
                 >
                   <div>
@@ -252,7 +224,10 @@ const AdminPage: React.FC = () => {
                     <p>Data de Publicação: {formatDate(news.publishDate)}</p>
                   </div>
                   <div>
-                    <button className="text-red-500" onClick={() => handleDeleteNews(news.slug)}>
+                    <button
+                      className="text-red-500"
+                      onClick={() => handleDeleteNews(news.slug)}
+                    >
                       X
                     </button>
                   </div>
@@ -260,7 +235,6 @@ const AdminPage: React.FC = () => {
               ))}
             </ul>
           </div>
-
           <button
             onClick={handleLogout}
             className="bg-red-500 text-white rounded-md px-4 mt-3 py-2 mb-10"
